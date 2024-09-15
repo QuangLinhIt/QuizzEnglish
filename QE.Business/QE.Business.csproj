@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QE.Core\QE.Core.csproj" />
+    <ProjectReference Include="..\QE.DataAccess\QE.DataAccess.csproj" />
+  </ItemGroup>
+
+</Project>

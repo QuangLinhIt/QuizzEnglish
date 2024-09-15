@@ -1,0 +1,6 @@
+@QE.WebAPI_HostAddress = http://localhost:5089
+
+GET {{QE.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
