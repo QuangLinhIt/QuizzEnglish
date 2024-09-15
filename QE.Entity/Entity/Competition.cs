@@ -12,16 +12,16 @@ namespace QE.Entity.Entity
     {
         public int Id { get; set; }
 
-        public required string Player1Id { get; set; }
+        public string Player1Id { get; set; } = null!;
         public AppUser Player1 { get; set; } = null!;
 
-        public required string Player2Id { get; set; }
+        public string? Player2Id { get; set; }
         public AppUser Player2 { get; set; } = null!;
 
         public CompetitionStatus CompetitionStatus { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; } 
-        public DateTime LimitTime { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; } 
+        public DateTime? LimitTime { get; set; }
 
         public ICollection<CompetitionQuizz> CompetitionQuizzes { get; set; } = null!;
     }

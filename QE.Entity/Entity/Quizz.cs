@@ -12,9 +12,9 @@ namespace QE.Entity.Entity
     public class Quizz
     {
         public int Id { get; set; }
-        public required string Name { get; set; }
+        public string Name { get; set; } = null!;
 
-        public required string CreatorId { get; set; }
+        public string CreatorId { get; set; } = null!;
         public AppUser Creator { get; set; } = null!;
 
         public QuizzStatus QuizzStatus { get; set; }

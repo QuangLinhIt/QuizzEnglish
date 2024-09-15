@@ -9,10 +9,10 @@ namespace QE.Entity.Entity.Abstract.Question.Inherit
 {
     public class MultipleChoiceQuestion:Question
     {
-        public required string OptionA { get; set; }
-        public required string OptionB { get; set; }
-        public required string OptionC { get; set; }
-        public required string OptionD { get; set; }
+        public string OptionB { get; set; } = null!;
+        public string OptionA { get; set; } = null!;
+        public string OptionC { get; set; } = null!;
+        public string OptionD { get; set; } = null!;
         public QuestionOption CorrectOption { get; set; }
     }
 }

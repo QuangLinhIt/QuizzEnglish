@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QE.Entity.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace QE.Entity.Entity.Jwt
 {
-    [Owned]
     public class RefreshToken
     {
-        public required string Token { get; set; }
+        public int Id { get; set; }
+        public string Token { get; set; } = null!;
 
         public DateTime ExpireOn { get; set; }
 
@@ -24,5 +25,8 @@ namespace QE.Entity.Entity.Jwt
 
         // we have two conditions for token to be active"IsActive" => was not revoked and not IsExpired
         public bool IsActive => RevokedOn == null && !IsExpired;
+
+        public string AppUserId { get; set; } = null!;
+        public AppUser AppUser { get; set; } = null!;
     }
 }

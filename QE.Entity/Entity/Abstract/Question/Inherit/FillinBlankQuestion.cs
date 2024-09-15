@@ -8,6 +8,6 @@ namespace QE.Entity.Entity.Abstract.Question.Inherit
 {
     public class FillinBlankQuestion:Question
     {
-        public required string Answer { get; set; }
+        public string Answer { get; set; } = null!;
     }
 }

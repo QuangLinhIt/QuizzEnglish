@@ -13,9 +13,9 @@ namespace QE.Entity.Entity
         public int Score { get; set; }
         public int QuizzId { get; set; }
         public Quizz Quizz { get; set; } = null!;
-        public required string UserId { get; set; }
+        public string UserId { get; set; } = null!;
         public AppUser AppUser { get; set; } = null!;
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace QE.Entity.Entity.Abstract.Question
     public abstract class Question
     {
         public int Id { get; set; }
-        public required string Title { get; set; }
+        public string Title { get; set; } = null!;
         public QuestionType QuestionType { get; set; }
     }
 }

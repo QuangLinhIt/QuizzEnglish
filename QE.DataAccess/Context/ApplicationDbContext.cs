@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using QE.Entity.Identity;
 using QE.Entity.Entity.Abstract.Question.Inherit;
 using QE.Entity.Enum;
+using Microsoft.Extensions.Options;
 
 namespace QE.DataAccess.Context
 {
@@ -16,16 +17,23 @@ namespace QE.DataAccess.Context
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         { }
 
-        public DbSet<Competition> Competitions { get; set; }
-        public DbSet<CompetitionQuizz> CompetitionQuizzes { get; set; }
-        public DbSet<Quizz> Quizzes { get; set; }
-        public DbSet<Question> Questions { get; set; }
-        public DbSet<QuizzScore> QuizzScores { get; set; }
-        public DbSet<Topic> Topics { get; set; }
-        public DbSet<Vocabulary> Vocabularies { get; set; }
-        public DbSet<VocabularyTopic> VocabularyTopics { get; set; }
-        public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public virtual DbSet<Competition> Competitions { get; set; }
+        public virtual DbSet<CompetitionQuizz> CompetitionQuizzes { get; set; }
+        public virtual DbSet<Quizz> Quizzes { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<QuizzScore> QuizzScores { get; set; }
+        public virtual DbSet<Topic> Topics { get; set; }
+        public virtual DbSet<Vocabulary> Vocabularies { get; set; }
+        public virtual DbSet<VocabularyTopic> VocabularyTopics { get; set; }
+        public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Server=.;Database=QuizzEnglish;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;");
+            }
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -43,14 +51,18 @@ namespace QE.DataAccess.Context
             //Competition vs Quizz: many to many (CompetitionQuizz)
             modelBuilder.Entity<CompetitionQuizz>()
                 .HasKey(cq => new { cq.CompetitionId, cq.QuizzId });
+
             modelBuilder.Entity<CompetitionQuizz>()
                 .HasOne(c => c.Competition)
                 .WithMany(cq => cq.CompetitionQuizzes)
-                .HasForeignKey(cq => cq.CompetitionId);
+                .HasForeignKey(cq => cq.CompetitionId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<CompetitionQuizz>()
                 .HasOne(q => q.Quizz)
                 .WithMany()
-                .HasForeignKey(cq => cq.QuizzId);
+                .HasForeignKey(cq => cq.QuizzId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Quizz vs QuizzScore: one to many
             modelBuilder.Entity<QuizzScore>()
@@ -93,6 +105,11 @@ namespace QE.DataAccess.Context
                 .HasOne(u => u.Player2)
                 .WithMany()
                 .HasForeignKey(c => c.Player2Id);
+            //AppUser vs RefreshToken
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne(rt => rt.AppUser)
+                .WithMany(u => u.RefreshTokens)
+                .HasForeignKey(rt => rt.AppUserId);
         }
     }
 }

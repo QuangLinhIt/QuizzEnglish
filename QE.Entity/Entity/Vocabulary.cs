@@ -9,11 +9,11 @@ namespace QE.Entity.Entity
     public class Vocabulary
     {
         public int Id { get; set; }
-        public required string Name { get; set; }
-        public required string Meaning { get; set; }
-        public required string Pronoun { get; set; }
-        public required string Image { get; set; }
-        public required string Audio { get; set; }
+        public string Name { get; set; } = null!;
+        public string Meaning { get; set; } = null!;
+        public string Pronoun { get; set; } = null!;
+        public  string? Image { get; set; }
+        public  string? Audio { get; set; }
 
         public ICollection<VocabularyTopic> VocabularyTopics { get; set; } = null!;
 

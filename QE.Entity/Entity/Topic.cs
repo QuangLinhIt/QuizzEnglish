@@ -9,7 +9,7 @@ namespace QE.Entity.Entity
     public class Topic
     {
         public int Id { get; set; }
-        public required string Name { get; set; }
+        public string Name { get; set; } = null!;
 
         public ICollection<VocabularyTopic> VocabularyTopics { get; set; } = null!;
     }
