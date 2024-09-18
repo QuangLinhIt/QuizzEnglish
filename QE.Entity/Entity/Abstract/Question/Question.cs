@@ -12,5 +12,7 @@ namespace QE.Entity.Entity.Abstract.Question
         public int Id { get; set; }
         public string Title { get; set; } = null!;
         public QuestionType QuestionType { get; set; }
+        public ICollection<QuestionQuizz> QuestionQuizzes { get; set; } = null!;
+
     }
 }

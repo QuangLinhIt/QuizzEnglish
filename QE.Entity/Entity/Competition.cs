@@ -23,6 +23,6 @@ namespace QE.Entity.Entity
         public DateTime? EndTime { get; set; } 
         public DateTime? LimitTime { get; set; }
 
-        public ICollection<CompetitionQuizz> CompetitionQuizzes { get; set; } = null!;
+        public ICollection<CompetitionQuizz>? CompetitionQuizzes { get; set; }
     }
 }

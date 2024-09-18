@@ -21,6 +21,7 @@ namespace QE.DataAccess.Context
         public virtual DbSet<CompetitionQuizz> CompetitionQuizzes { get; set; }
         public virtual DbSet<Quizz> Quizzes { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<QuestionQuizz> QuestionQuizzes { get; set; }
         public virtual DbSet<QuizzScore> QuizzScores { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
         public virtual DbSet<Vocabulary> Vocabularies { get; set; }
@@ -44,9 +45,16 @@ namespace QE.DataAccess.Context
                .HasValue<MultipleChoiceQuestion>(QuestionType.MultipleChoiceQuestion);
 
             //Quizz vs Question : many to many (QuestionQuizz)
-            modelBuilder.Entity<Quizz>()
-                .HasMany(q => q.Questions)
-                .WithMany();
+            modelBuilder.Entity<QuestionQuizz>()
+                .HasKey(qq => new { qq.QuestionId, qq.QuizzId });
+            modelBuilder.Entity<QuestionQuizz>()
+                .HasOne(q => q.Quizz)
+                .WithMany(q => q.QuestionQuizzes)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<QuestionQuizz>()
+                .HasOne(q => q.Question)
+                .WithMany(q => q.QuestionQuizzes)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Competition vs Quizz: many to many (CompetitionQuizz)
             modelBuilder.Entity<CompetitionQuizz>()
@@ -68,7 +76,8 @@ namespace QE.DataAccess.Context
             modelBuilder.Entity<QuizzScore>()
                 .HasOne(q => q.Quizz)
                 .WithMany(qs => qs.QuizzScores)
-                .HasForeignKey(qs => qs.QuizzId);
+                .HasForeignKey(qs => qs.QuizzId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Topic vs Vocabulary : many to many relationship
             modelBuilder.Entity<VocabularyTopic>()
@@ -77,39 +86,42 @@ namespace QE.DataAccess.Context
                 .HasOne(v => v.Vocabulary)
                 .WithMany(vt => vt.VocabularyTopics)
                 .HasForeignKey(vt => vt.VocabularyId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<VocabularyTopic>()
                 .HasOne(t => t.Topic)
                 .WithMany(vt => vt.VocabularyTopics)
                 .HasForeignKey(vt => vt.TopicId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.Restrict);
 
             //AppUser vs RefreshToken: one to many relationship
             modelBuilder.Entity<AppUser>()
                 .HasMany(r => r.RefreshTokens)
                 .WithOne()
-                .IsRequired();
-
+                .OnDelete(DeleteBehavior.Restrict);
             //Quizz vs AppUser: one to many
             modelBuilder.Entity<Quizz>()
                 .HasOne(u => u.Creator)
                 .WithMany()
-                .HasForeignKey(q => q.CreatorId);
+                .HasForeignKey(q => q.CreatorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             //Competition vs AppUser: One to Many
             modelBuilder.Entity<Competition>()
                 .HasOne(u => u.Player1)
                 .WithMany()
-                .HasForeignKey(c => c.Player1Id);
+                .HasForeignKey(c => c.Player1Id)
+                .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Competition>()
                 .HasOne(u => u.Player2)
                 .WithMany()
-                .HasForeignKey(c => c.Player2Id);
+                .HasForeignKey(c => c.Player2Id)
+                .OnDelete(DeleteBehavior.Restrict);
             //AppUser vs RefreshToken
             modelBuilder.Entity<RefreshToken>()
                 .HasOne(rt => rt.AppUser)
                 .WithMany(u => u.RefreshTokens)
-                .HasForeignKey(rt => rt.AppUserId);
+                .HasForeignKey(rt => rt.AppUserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

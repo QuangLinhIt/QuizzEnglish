@@ -229,12 +229,13 @@ namespace QE.DataAccess.Migrations
                         column: x => x.Player1Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Competitions_AspNetUsers_Player2Id",
                         column: x => x.Player2Id,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -255,7 +256,7 @@ namespace QE.DataAccess.Migrations
                         column: x => x.CreatorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -278,7 +279,7 @@ namespace QE.DataAccess.Migrations
                         column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -296,13 +297,13 @@ namespace QE.DataAccess.Migrations
                         column: x => x.TopicId,
                         principalTable: "Topics",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_VocabularyTopics_Vocabularies_VocabularyId",
                         column: x => x.VocabularyId,
                         principalTable: "Vocabularies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -332,27 +333,27 @@ namespace QE.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuestionQuizz",
+                name: "QuestionQuizzes",
                 columns: table => new
                 {
-                    QuestionsId = table.Column<int>(type: "int", nullable: false),
-                    QuizzId = table.Column<int>(type: "int", nullable: false)
+                    QuizzId = table.Column<int>(type: "int", nullable: false),
+                    QuestionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestionQuizz", x => new { x.QuestionsId, x.QuizzId });
+                    table.PrimaryKey("PK_QuestionQuizzes", x => new { x.QuestionId, x.QuizzId });
                     table.ForeignKey(
-                        name: "FK_QuestionQuizz_Questions_QuestionsId",
-                        column: x => x.QuestionsId,
+                        name: "FK_QuestionQuizzes_Questions_QuestionId",
+                        column: x => x.QuestionId,
                         principalTable: "Questions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_QuestionQuizz_Quizzes_QuizzId",
+                        name: "FK_QuestionQuizzes_Quizzes_QuizzId",
                         column: x => x.QuizzId,
                         principalTable: "Quizzes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -380,7 +381,7 @@ namespace QE.DataAccess.Migrations
                         column: x => x.QuizzId,
                         principalTable: "Quizzes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -438,8 +439,8 @@ namespace QE.DataAccess.Migrations
                 column: "Player2Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionQuizz_QuizzId",
-                table: "QuestionQuizz",
+                name: "IX_QuestionQuizzes_QuizzId",
+                table: "QuestionQuizzes",
                 column: "QuizzId");
 
             migrationBuilder.CreateIndex(
@@ -490,7 +491,7 @@ namespace QE.DataAccess.Migrations
                 name: "CompetitionQuizzes");
 
             migrationBuilder.DropTable(
-                name: "QuestionQuizz");
+                name: "QuestionQuizzes");
 
             migrationBuilder.DropTable(
                 name: "QuizzScores");

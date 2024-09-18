@@ -12,7 +12,7 @@ using QE.DataAccess.Context;
 namespace QE.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240915133401_InitialCreate")]
+    [Migration("20240917173142_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -271,6 +271,21 @@ namespace QE.DataAccess.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
+            modelBuilder.Entity("QE.Entity.Entity.QuestionQuizz", b =>
+                {
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuizzId")
+                        .HasColumnType("int");
+
+                    b.HasKey("QuestionId", "QuizzId");
+
+                    b.HasIndex("QuizzId");
+
+                    b.ToTable("QuestionQuizzes");
+                });
+
             modelBuilder.Entity("QE.Entity.Entity.Quizz", b =>
                 {
                     b.Property<int>("Id")
@@ -466,21 +481,6 @@ namespace QE.DataAccess.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("QuestionQuizz", b =>
-                {
-                    b.Property<int>("QuestionsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuizzId")
-                        .HasColumnType("int");
-
-                    b.HasKey("QuestionsId", "QuizzId");
-
-                    b.HasIndex("QuizzId");
-
-                    b.ToTable("QuestionQuizz");
-                });
-
             modelBuilder.Entity("QE.Entity.Entity.Abstract.Question.Inherit.FillinBlankQuestion", b =>
                 {
                     b.HasBaseType("QE.Entity.Entity.Abstract.Question.Question");
@@ -574,12 +574,13 @@ namespace QE.DataAccess.Migrations
                     b.HasOne("QE.Entity.Identity.AppUser", "Player1")
                         .WithMany()
                         .HasForeignKey("Player1Id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("QE.Entity.Identity.AppUser", "Player2")
                         .WithMany()
-                        .HasForeignKey("Player2Id");
+                        .HasForeignKey("Player2Id")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Player1");
 
@@ -610,10 +611,29 @@ namespace QE.DataAccess.Migrations
                     b.HasOne("QE.Entity.Identity.AppUser", "AppUser")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("QE.Entity.Entity.QuestionQuizz", b =>
+                {
+                    b.HasOne("QE.Entity.Entity.Abstract.Question.Question", "Question")
+                        .WithMany("QuestionQuizzes")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("QE.Entity.Entity.Quizz", "Quizz")
+                        .WithMany("QuestionQuizzes")
+                        .HasForeignKey("QuizzId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+
+                    b.Navigation("Quizz");
                 });
 
             modelBuilder.Entity("QE.Entity.Entity.Quizz", b =>
@@ -621,7 +641,7 @@ namespace QE.DataAccess.Migrations
                     b.HasOne("QE.Entity.Identity.AppUser", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Creator");
@@ -636,7 +656,7 @@ namespace QE.DataAccess.Migrations
                     b.HasOne("QE.Entity.Entity.Quizz", "Quizz")
                         .WithMany("QuizzScores")
                         .HasForeignKey("QuizzId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("AppUser");
@@ -649,13 +669,13 @@ namespace QE.DataAccess.Migrations
                     b.HasOne("QE.Entity.Entity.Topic", "Topic")
                         .WithMany("VocabularyTopics")
                         .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("QE.Entity.Entity.Vocabulary", "Vocabulary")
                         .WithMany("VocabularyTopics")
                         .HasForeignKey("VocabularyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Topic");
@@ -663,19 +683,9 @@ namespace QE.DataAccess.Migrations
                     b.Navigation("Vocabulary");
                 });
 
-            modelBuilder.Entity("QuestionQuizz", b =>
+            modelBuilder.Entity("QE.Entity.Entity.Abstract.Question.Question", b =>
                 {
-                    b.HasOne("QE.Entity.Entity.Abstract.Question.Question", null)
-                        .WithMany()
-                        .HasForeignKey("QuestionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("QE.Entity.Entity.Quizz", null)
-                        .WithMany()
-                        .HasForeignKey("QuizzId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("QuestionQuizzes");
                 });
 
             modelBuilder.Entity("QE.Entity.Entity.Competition", b =>
@@ -685,6 +695,8 @@ namespace QE.DataAccess.Migrations
 
             modelBuilder.Entity("QE.Entity.Entity.Quizz", b =>
                 {
+                    b.Navigation("QuestionQuizzes");
+
                     b.Navigation("QuizzScores");
                 });
 
