@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace QE.DataAccess.Repository.Detail.Interface
 {
-    public interface IQuizzScoreRepository:IRepository<QuizzScore>
+    public interface IQuestionQuizzRepository:IRepository<QuestionQuizz>
     {
-        Task<IEnumerable<QuizzScore>>? GetQuizzScoreByUserIdAndQuizzId(int quizzId, string userId);
     }
 }

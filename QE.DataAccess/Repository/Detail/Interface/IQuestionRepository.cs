@@ -10,6 +10,6 @@ namespace QE.DataAccess.Repository.Detail.Interface
 {
     public interface IQuestionRepository:IRepository<Question>
     {
-        Task<IEnumerable<Question>>? GetQuestionByQuizz(int quizzId);
+
     }
 }

@@ -8,10 +8,10 @@ namespace QE.DataAccess.Repository.Common.Interface
 {
     public interface IUnitOfWork
     {
+        Task<int> SaveChangesAsync();
         Task BeginTransactionAsync();
-        Task CommitTransactionAsync();
-        Task RollbackTransactionAsync();
-        Task<int> SaveChangesTransactionAsync();
+        Task CommitAsync();
+        Task RollbackAsync();
 
     }
 }

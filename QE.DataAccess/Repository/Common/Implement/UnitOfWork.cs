@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using QE.DataAccess.Context;
 using QE.DataAccess.Repository.Common.Interface;
 using System;
@@ -23,11 +24,11 @@ namespace QE.DataAccess.Repository.Common.Implement
             _dbTransaction = await _applicationDbContext.Database.BeginTransactionAsync();
         }
 
-        public async Task CommitTransactionAsync()
+        public async Task CommitAsync()
         {
             try
             {
-                if(_dbTransaction != null)
+                if (_dbTransaction != null)
                 {
                     await _dbTransaction.CommitAsync();
                 }
@@ -44,17 +45,16 @@ namespace QE.DataAccess.Repository.Common.Implement
             }
         }
 
-        public async Task RollbackTransactionAsync()
+        public async Task RollbackAsync()
         {
             await _dbTransaction.RollbackAsync();
             await _dbTransaction.DisposeAsync();
             _dbTransaction = null!;
         }
 
-        public async Task<int> SaveChangesTransactionAsync()
+        public async Task<int> SaveChangesAsync()
         {
             return await _applicationDbContext.SaveChangesAsync();
         }
-
     }
 }

@@ -9,6 +9,7 @@ namespace QE.Entity.Entity
 {
     public class CompetitionQuizz
     {
+        public int Id { get; set; }
         public int QuizzId { get; set; }
         public Quizz Quizz { get; set; } = null!;
 

@@ -10,6 +10,5 @@ namespace QE.DataAccess.Repository.Detail.Interface
 {
     public interface IVocabularyRepository:IRepository<Vocabulary>
     {
-        Task<IEnumerable<Vocabulary>>? GetVocabularyByTopic(int topicId);
     }
 }

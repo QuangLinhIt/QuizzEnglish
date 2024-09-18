@@ -9,7 +9,8 @@ namespace QE.DataAccess.Repository.Detail.Interface
 {
     public interface IVocabularyTopicUnitOfWork:IUnitOfWork
     {
-        ITopicRepository Topics { get; }
-        IVocabularyRepository Vocabularies { get; }
+        ITopicRepository Topic { get; }
+        IVocabularyRepository Vocabulary { get; }
+        IVocabularyTopicRepository VocabularyTopic { get; }
     }
 }

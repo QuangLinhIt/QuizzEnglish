@@ -11,6 +11,6 @@ namespace QE.Entity.Entity
         public int Id { get; set; }
         public string Name { get; set; } = null!;
 
-        public ICollection<VocabularyTopic>? VocabularyTopics { get; set; }
+        public ICollection<VocabularyTopic> VocabularyTopics { get; set; } = null!;
     }
 }

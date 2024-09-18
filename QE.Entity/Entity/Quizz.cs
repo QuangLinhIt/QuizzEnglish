@@ -18,7 +18,7 @@ namespace QE.Entity.Entity
         public AppUser Creator { get; set; } = null!;
 
         public QuizzStatus QuizzStatus { get; set; }
-        public ICollection<QuestionQuizz>? QuestionQuizzes { get; set; }
+        public ICollection<QuestionQuizz> QuestionQuizzes { get; set; } = null!;
 
         public ICollection<QuizzScore>? QuizzScores { get; set; }
        

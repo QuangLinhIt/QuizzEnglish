@@ -1,5 +1,4 @@
 ﻿using QE.DataAccess.Repository.Common.Interface;
-using QE.Entity.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace QE.DataAccess.Repository.Detail.Interface
 {
-    public interface IQuizzScoreRepository:IRepository<QuizzScore>
+    public interface IQuestionQuizzUnitOfWork:IUnitOfWork
     {
-        Task<IEnumerable<QuizzScore>>? GetQuizzScoreByUserIdAndQuizzId(int quizzId, string userId);
+        IQuestionRepository Question { get; }
+        IQuizzRepository Quizz { get; }
+        IQuestionQuizzRepository QuestionQuizz { get; }
     }
 }

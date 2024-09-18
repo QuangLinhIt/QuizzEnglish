@@ -19,29 +19,11 @@ namespace QE.DataAccess.Repository.Detail.Implement
             _applicationDbContext = applicationDbContext;
         }
 
-        public override async Task<Competition?> GetByIdAsync (int id)
+        public override async Task<Competition?> GetByIdAsync(int id)
         {
             return await _applicationDbContext.Competitions
                 .Include(x => x.CompetitionQuizzes)
                 .FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        public override async Task<bool> DeleteAsync (Competition competition)
-        {
-            var existingCompetition = await _applicationDbContext.Competitions
-                .Include(x => x.CompetitionQuizzes)
-                .FirstOrDefaultAsync(x => x.Id == competition.Id);
-            if (existingCompetition != null)
-            {
-                if (existingCompetition.CompetitionQuizzes != null)
-                {
-                    existingCompetition.CompetitionQuizzes.Clear();
-                }
-                _applicationDbContext.Competitions.Remove(competition);
-                await _applicationDbContext.SaveChangesAsync();
-                return true;
-            }
-            return false;
         }
     }
 }

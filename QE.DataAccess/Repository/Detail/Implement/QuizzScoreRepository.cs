@@ -18,21 +18,14 @@ namespace QE.DataAccess.Repository.Detail.Implement
         {
             _applicationDbContext = applicationDbContext;
         }
-     
-        public virtual async Task<IEnumerable<QuizzScore>>? GetQuizzScoresByQuizz(int quizzId,string userId)
+        
+        public virtual async Task<IEnumerable<QuizzScore>>? GetQuizzScoreByUserIdAndQuizzId(int quizzId,string userId)
         {
-            return await _applicationDbContext.QuizzScores.Where(x => x.QuizzId == quizzId && x.UserId == userId).ToListAsync();
+            return await _applicationDbContext.QuizzScores
+                .Where(x => x.QuizzId == quizzId && x.UserId == userId)
+                .ToListAsync();
         }
 
-        public override async Task<QuizzScore> UpdateAsync (QuizzScore quizzScore)
-        {
-            // Không thực hiện gì
-            return await Task.FromResult(quizzScore);
-        }
-        public override async Task<bool> DeleteAsync (QuizzScore quizzScore)
-        {
-            // Không thực hiện việc xóa
-            return await Task.FromResult(true);
-        }
+
     }
 }
