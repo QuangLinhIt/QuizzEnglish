@@ -76,7 +76,7 @@ namespace QE.Business.Logic.Topic
                     await _unitOfWork.SaveChangesAsync();
 
                     //step 2: update Vocabulary
-                    //step 2.1: delete all VocabularyTopic relationship
+                    //step 2.1: delete all old VocabularyTopic relationship
                     if (existingTopic.VocabularyTopics!=null && existingTopic.VocabularyTopics.Any())
                     {
                         foreach(var item in existingTopic.VocabularyTopics)
@@ -90,7 +90,7 @@ namespace QE.Business.Logic.Topic
                             await _unitOfWork.SaveChangesAsync();
                         }
                     }
-                    //step 2.2: add list VocabularyTopic
+                    //step 2.2: add new VocabularyTopic list
                     if(topicModel.VocabularyTopics!=null && topicModel.VocabularyTopics.Any())
                     {
                         foreach(var item in topicModel.VocabularyTopics)
@@ -139,7 +139,12 @@ namespace QE.Business.Logic.Topic
                         }
                     }
                     //step 2: delete Topic
-                    await _unitOfWork.Topic.DeleteAsync(existingTopic);
+                    var topicEntity = new QE.Entity.Entity.Topic()
+                    {
+                        Id = topicModel.Id,
+                        Name = topicModel.Name,
+                    };
+                    await _unitOfWork.Topic.DeleteAsync(topicEntity);
                     await _unitOfWork.SaveChangesAsync();
                     //step 3: delete all Vocabulary not relationship
                     await _unitOfWork.Vocabulary.DeleteVocabulariesNotRelationship();

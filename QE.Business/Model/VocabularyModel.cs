@@ -15,5 +15,6 @@ namespace QE.Business.Model
         public string Pronoun { get; set; } = null!;
         public string? Image { get; set; }
         public string? Audio { get; set; }
+        public ICollection<VocabularyTopic> VocabularyTopics { get; set; } = null!;
     }
 }
