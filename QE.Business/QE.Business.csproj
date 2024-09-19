@@ -12,11 +12,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Mapper\" />
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <Folder Include="Logic\Competition\" />
+    <Folder Include="Logic\CompetitionQuizz\" />
+    <Folder Include="Logic\Question\" />
+    <Folder Include="Logic\VocabularyTopic\" />
+    <Folder Include="Logic\Vocabulary\" />
+    <Folder Include="Logic\QuizzScore\" />
+    <Folder Include="Logic\Quizz\" />
+    <Folder Include="Logic\QuestionQuizz\" />
   </ItemGroup>
 
 </Project>

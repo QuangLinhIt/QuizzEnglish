@@ -1,4 +1,4 @@
-﻿using QE.Entity.Entity.Abstract.Question;
+﻿using QE.Entity.Entity;
 using QE.Entity.Enum;
 using QE.Entity.Identity;
 using System;
@@ -7,21 +7,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QE.Entity.Entity
+namespace QE.Business.Model
 {
-    public class Quizz
+    public partial class QuizzModel
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-
         public string CreatorId { get; set; } = null!;
-        public AppUser Creator { get; set; } = null!;
-
         public QuizzStatus QuizzStatus { get; set; }
         public DateTime? LimitTime { get; set; }
         public ICollection<QuestionQuizz> QuestionQuizzes { get; set; } = null!;
-
-        public ICollection<QuizzScore>? QuizzScores { get; set; }
-       
     }
 }

@@ -7,14 +7,8 @@ using System.Threading.Tasks;
 
 namespace QE.Business.Model
 {
-    public class VocabularyTopicModel
+    public partial class VocabularyTopicModel
     {
-        public VocabularyTopicModel() { }
-        public VocabularyTopicModel(VocabularyTopic vt)
-        {
-            this.TopicId = vt.TopicId;
-            this.VocabularyId = vt.VocabularyId;
-        }
         public int TopicId { get; set; }
         public int VocabularyId { get; set; }
     }

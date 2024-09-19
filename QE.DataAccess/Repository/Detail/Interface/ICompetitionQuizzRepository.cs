@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace QE.DataAccess.Repository.Detail.Interface
 {
-    public interface ICompetititonQuizzRepository:IRepository<CompetitionQuizz>
+    public interface ICompetitionQuizzRepository:IRepository<CompetitionQuizz>
     {
 
     }

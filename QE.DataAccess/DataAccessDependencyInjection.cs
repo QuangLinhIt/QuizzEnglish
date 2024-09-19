@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using QE.DataAccess.Context;
+using QE.DataAccess.Repository.Common.Implement;
+using QE.DataAccess.Repository.Common.Interface;
+using QE.DataAccess.Repository.Detail.Implement;
+using QE.DataAccess.Repository.Detail.Interface;
 using QE.Entity.Identity;
 using System;
 
@@ -25,7 +29,20 @@ namespace QE.DataAccess
         #region Khai báo Dependency Injection
         private static void AddRepository(this IServiceCollection services)
         {
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<ICompetitionQuizzRepository, CompetitionQuizzRepository>();
+            services.AddScoped<ICompetitionRepository, CompetitionRepository>();
+            services.AddScoped<IQuestionQuizzRepository, QuestionQuizzRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IQuizzRepository, QuizzRepository>();
+            services.AddScoped<IQuizzScoreRepository, QuizzScoreRepository>();
+            services.AddScoped<ITopicRepository, TopicRepository>();
+            services.AddScoped<IVocabularyRepository, VocabularyRepository>();
+            services.AddScoped<IVocabularyTopicRepository, VocabularyTopicRepository>();
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IVocabularyTopicUnitOfWork, VocabularyTopicUnitOfWork>();
+            services.AddScoped<IQuestionQuizzUnitOfWork, QuestionQuizzUnitOfWork>();
         }
         #endregion
 

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace QE.DataAccess.Repository.Detail.Implement
 {
-    public class CompetitionQuizzRepository:Repository<CompetitionQuizz>,ICompetititonQuizzRepository
+    public class CompetitionQuizzRepository:Repository<CompetitionQuizz>,ICompetitionQuizzRepository
     {
         private readonly ApplicationDbContext _applicationDbContext;
         public CompetitionQuizzRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)

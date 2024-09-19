@@ -26,5 +26,18 @@ namespace QE.DataAccess.Repository.Detail.Implement
                 .ThenInclude(x => x.Topic)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public virtual async Task<bool> DeleteVocabulariesNotRelationship()
+        {
+            var vocabulariesNotRelationship = await _applicationDbContext.Vocabularies
+                .Where(v => !_applicationDbContext.VocabularyTopics.Any(vt => vt.VocabularyId == v.Id))
+                .ToListAsync();
+            if(vocabulariesNotRelationship!=null && vocabulariesNotRelationship.Any())
+            {
+                _applicationDbContext.Vocabularies.RemoveRange(vocabulariesNotRelationship);
+                await _applicationDbContext.SaveChangesAsync();
+            }
+            return true;
+        }
     }
 }
