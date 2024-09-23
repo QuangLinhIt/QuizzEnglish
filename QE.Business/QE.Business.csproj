@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +23,6 @@
     <Folder Include="Logic\VocabularyTopic\" />
     <Folder Include="Logic\QuizzScore\" />
     <Folder Include="Logic\Quizz\" />
-    <Folder Include="Logic\QuestionQuizz\" />
   </ItemGroup>
 
 </Project>

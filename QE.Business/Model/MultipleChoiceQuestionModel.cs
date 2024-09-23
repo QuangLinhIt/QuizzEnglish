@@ -1,4 +1,5 @@
-﻿using QE.Entity.Enum;
+﻿using QE.Entity.Entity;
+using QE.Entity.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace QE.Business.Model
         public string OptionD { get; set; } = null!;
         public QuestionOption CorrectOption { get; set; }
         public QuestionType QuestionType { get; set; }
+        public ICollection<QuestionQuizz> QuestionQuizzes { get; set; } = null!;
     }
 }

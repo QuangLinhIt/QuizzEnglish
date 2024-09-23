@@ -12,6 +12,6 @@ namespace QE.Business.Logic.Vocabulary
         Task<VocabularyModel> GetById(int id);
         Task<int> Create(VocabularyModel vocabularyModel);
         Task<int> Update(VocabularyModel vocabularyModel);
-        Task<int> Delete(VocabularyModel vocabularyModel);
+        Task<int> Delete(int id);
     }
 }

@@ -13,6 +13,6 @@ namespace QE.Business.Logic.Topic
         Task<TopicModel> GetById(int id);
         Task<int> Create(TopicModel topicModel);
         Task<int> Update(TopicModel topicModel);
-        Task<int> Delete(TopicModel topicModel);
+        Task<int> Delete(int id);
     }
 }

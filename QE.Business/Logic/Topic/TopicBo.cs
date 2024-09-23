@@ -2,7 +2,7 @@
 using QE.Business.Model;
 using QE.Core.Enum;
 using QE.DataAccess.Context;
-using QE.DataAccess.Repository.Detail.Implement;
+using QE.DataAccess.Repository.Detail.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +13,9 @@ namespace QE.Business.Logic.Topic
 {
     public class TopicBo:ITopicBo
     {
-        private VocabularyTopicUnitOfWork _unitOfWork;
-        private IMapper _mapper;
-        public TopicBo(VocabularyTopicUnitOfWork unitOfWork,IMapper mapper)
+        private readonly IVocabularyTopicUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+        public TopicBo(IVocabularyTopicUnitOfWork unitOfWork,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -43,117 +43,103 @@ namespace QE.Business.Logic.Topic
 
         public async Task<int> Create(TopicModel topicModel)
         {
-            // Chỉ tạo mới Topic
-            if (topicModel != null)
+            var topicEntity = new QE.Entity.Entity.Topic()
             {
+                Name = topicModel.Name,
+            };
+            await _unitOfWork.Topic.InsertAsync(topicEntity);
+            return (int)ResponseEnumType.Sucess;
+        }
+
+        public async Task<int> Update(TopicModel topicModel)
+        {
+            await _unitOfWork.BeginTransactionAsync();
+            //Find Topic
+            var existingTopic = await _unitOfWork.Topic.GetByIdAsync(topicModel.Id);
+            if (existingTopic != null)
+            {
+                //step 1: update topic
                 var topicEntity = new QE.Entity.Entity.Topic()
                 {
                     Id = topicModel.Id,
                     Name = topicModel.Name,
                 };
-                await _unitOfWork.Topic.InsertAsync(topicEntity);
-                return (int)ResponseEnumType.Sucess;
-            }
-            return (int)ResponseEnumType.Fail;
-        }
+                await _unitOfWork.Topic.UpdateAsync(topicEntity);
+                await _unitOfWork.SaveChangesAsync();
 
-        public async Task<int> Update(TopicModel topicModel)
-        {
-            if(topicModel != null)
-            {
-                await _unitOfWork.BeginTransactionAsync();
-                //Find Topic
-                var existingTopic = await _unitOfWork.Topic.GetByIdAsync(topicModel.Id);
-                if (existingTopic != null)
+                //step 2: update Vocabulary
+                //step 2.1: delete all old VocabularyTopic relationship
+                if (existingTopic.VocabularyTopics!=null && existingTopic.VocabularyTopics.Any())
                 {
-                    //step 1: update topic
-                    var topicEntity = new QE.Entity.Entity.Topic()
+                    foreach(var item in existingTopic.VocabularyTopics)
                     {
-                        Id = topicModel.Id,
-                        Name = topicModel.Name,
-                    };
-                    await _unitOfWork.Topic.UpdateAsync(topicEntity);
-                    await _unitOfWork.SaveChangesAsync();
-
-                    //step 2: update Vocabulary
-                    //step 2.1: delete all old VocabularyTopic relationship
-                    if (existingTopic.VocabularyTopics!=null && existingTopic.VocabularyTopics.Any())
-                    {
-                        foreach(var item in existingTopic.VocabularyTopics)
+                        var existingVocabularyTopicEntity = new QE.Entity.Entity.VocabularyTopic()
                         {
-                            var existingVocabularyTopicEntity = new QE.Entity.Entity.VocabularyTopic()
-                            {
-                                TopicId = item.TopicId,
-                                VocabularyId = item.VocabularyId,
-                            };
-                            await _unitOfWork.VocabularyTopic.DeleteAsync(existingVocabularyTopicEntity);
-                            await _unitOfWork.SaveChangesAsync();
-                        }
+                            TopicId = item.TopicId,
+                            VocabularyId = item.VocabularyId,
+                        };
+                        await _unitOfWork.VocabularyTopic.DeleteAsync(existingVocabularyTopicEntity);
+                        await _unitOfWork.SaveChangesAsync();
                     }
-                    //step 2.2: add new VocabularyTopic list
-                    if(topicModel.VocabularyTopics!=null && topicModel.VocabularyTopics.Any())
-                    {
-                        foreach(var item in topicModel.VocabularyTopics)
-                        {
-                            var vocabularyTopicEntity = new QE.Entity.Entity.VocabularyTopic()
-                            {
-                                TopicId = item.TopicId,
-                                VocabularyId = item.VocabularyId,
-                            };
-                            await _unitOfWork.VocabularyTopic.InsertAsync(vocabularyTopicEntity);
-                            await _unitOfWork.SaveChangesAsync();
-                        }
-                    }
-                    //step 3: delete all Vocabulary not relationship
-                    await _unitOfWork.Vocabulary.DeleteVocabulariesNotRelationship();
-                    await _unitOfWork.SaveChangesAsync();
                 }
+                //step 2.2: add new VocabularyTopic list
+                if(topicModel.VocabularyTopics!=null && topicModel.VocabularyTopics.Any())
+                {
+                    foreach(var item in topicModel.VocabularyTopics)
+                    {
+                        var vocabularyTopicEntity = new QE.Entity.Entity.VocabularyTopic()
+                        {
+                            TopicId = item.TopicId,
+                            VocabularyId = item.VocabularyId,
+                        };
+                        await _unitOfWork.VocabularyTopic.InsertAsync(vocabularyTopicEntity);
+                        await _unitOfWork.SaveChangesAsync();
+                    }
+                }
+                //step 3: delete all Vocabulary not relationship
+                await _unitOfWork.Vocabulary.DeleteVocabulariesNotRelationship();
+                await _unitOfWork.SaveChangesAsync();
+            }
                
-                await _unitOfWork.CommitAsync();
-                return (int)ResponseEnumType.Sucess;
-            }
-            return (int)ResponseEnumType.Fail;
+            await _unitOfWork.CommitAsync();
+            return (int)ResponseEnumType.Sucess;
         }
 
-        public async Task<int> Delete(TopicModel topicModel)
+        public async Task<int> Delete(int id)
         {
-            if (topicModel != null)
+            await _unitOfWork.BeginTransactionAsync();
+            //Find Topic
+            var existingTopic = await _unitOfWork.Topic.GetByIdAsync(id);
+            if (existingTopic != null)
             {
-                await _unitOfWork.BeginTransactionAsync();
-                //Find Topic
-                var existingTopic = await _unitOfWork.Topic.GetByIdAsync(topicModel.Id);
-                if (existingTopic != null)
+                //step 1: Delete VocabularyTopic
+                if(existingTopic.VocabularyTopics!=null && existingTopic.VocabularyTopics.Any())
                 {
-                    //step 1: Delete VocabularyTopic
-                    if(topicModel.VocabularyTopics!=null && topicModel.VocabularyTopics.Any())
+                    foreach(var item in existingTopic.VocabularyTopics)
                     {
-                        foreach(var item in topicModel.VocabularyTopics)
+                        var existingVocabularyTopicEntity = new QE.Entity.Entity.VocabularyTopic()
                         {
-                            var existingVocabularyTopicEntity = new QE.Entity.Entity.VocabularyTopic()
-                            {
-                                TopicId = item.TopicId,
-                                VocabularyId = item.VocabularyId,
-                            };
-                            await _unitOfWork.VocabularyTopic.DeleteAsync(existingVocabularyTopicEntity);
-                            await _unitOfWork.SaveChangesAsync();
-                        }
+                            TopicId = item.TopicId,
+                            VocabularyId = item.VocabularyId,
+                        };
+                        await _unitOfWork.VocabularyTopic.DeleteAsync(existingVocabularyTopicEntity);
+                        await _unitOfWork.SaveChangesAsync();
                     }
-                    //step 2: delete Topic
-                    var topicEntity = new QE.Entity.Entity.Topic()
-                    {
-                        Id = topicModel.Id,
-                        Name = topicModel.Name,
-                    };
-                    await _unitOfWork.Topic.DeleteAsync(topicEntity);
-                    await _unitOfWork.SaveChangesAsync();
-                    //step 3: delete all Vocabulary not relationship
-                    await _unitOfWork.Vocabulary.DeleteVocabulariesNotRelationship();
-                    await _unitOfWork.SaveChangesAsync();
                 }
-                await _unitOfWork.CommitAsync();
-                return (int)ResponseEnumType.Sucess;
+                //step 2: delete Topic
+                var topicEntity = new QE.Entity.Entity.Topic()
+                {
+                    Id = id,
+                    Name = existingTopic.Name,
+                };
+                await _unitOfWork.Topic.DeleteAsync(topicEntity);
+                await _unitOfWork.SaveChangesAsync();
+                //step 3: delete all Vocabulary not relationship
+                await _unitOfWork.Vocabulary.DeleteVocabulariesNotRelationship();
+                await _unitOfWork.SaveChangesAsync();
             }
-            return (int)ResponseEnumType.Fail;
+            await _unitOfWork.CommitAsync();
+            return (int)ResponseEnumType.Sucess;
         }
     }
 }

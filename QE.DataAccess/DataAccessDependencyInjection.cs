@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,8 +8,6 @@ using QE.DataAccess.Repository.Common.Interface;
 using QE.DataAccess.Repository.Detail.Implement;
 using QE.DataAccess.Repository.Detail.Interface;
 using QE.Entity.Identity;
-using System;
-
 
 namespace QE.DataAccess
 {
@@ -19,7 +16,7 @@ namespace QE.DataAccess
         #region Khai báo Extension Method kết nối DB
         public static IServiceCollection AddDataAccess(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDataBase(configuration);
+            services.AddDataBase();
             services.AddRepository();
             services.AddIdentityDb();
             return services;
@@ -47,10 +44,9 @@ namespace QE.DataAccess
         #endregion
 
         #region Đăng ký AppDbContext, sử dụng kết nối đến MS SQL Server
-        private static void AddDataBase(this IServiceCollection services, IConfiguration configuration)
+        private static void AddDataBase(this IServiceCollection services)
         {
-            var databaseConfig = configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(databaseConfig));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer("Server=.;Database=QuizzEnglish;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True;"));
         }
         #endregion
 

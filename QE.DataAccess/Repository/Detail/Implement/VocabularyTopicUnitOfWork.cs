@@ -16,11 +16,15 @@ namespace QE.DataAccess.Repository.Detail.Implement
         public IVocabularyRepository Vocabulary { get; private set; }
         public IVocabularyTopicRepository VocabularyTopic { get; private set; }
 
-        public VocabularyTopicUnitOfWork(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
+        public VocabularyTopicUnitOfWork(ApplicationDbContext applicationDbContext,
+                                         ITopicRepository topicRepository,
+                                         IVocabularyRepository vocabularyRepository,
+                                         IVocabularyTopicRepository vocabularyTopicRepository)
+            : base(applicationDbContext)
         {
-            Topic = new TopicRepository(applicationDbContext);
-            Vocabulary = new VocabularyRepository(applicationDbContext);
-            VocabularyTopic = new VocabularyTopicRepository(applicationDbContext);
+            Topic = topicRepository;
+            Vocabulary = vocabularyRepository;
+            VocabularyTopic = vocabularyTopicRepository;
         }
     }
 }
