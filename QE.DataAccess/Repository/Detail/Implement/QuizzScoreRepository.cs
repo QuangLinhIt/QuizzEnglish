@@ -19,13 +19,22 @@ namespace QE.DataAccess.Repository.Detail.Implement
             _applicationDbContext = applicationDbContext;
         }
         
-        public virtual async Task<IEnumerable<QuizzScore>>? GetQuizzScoreByUserIdAndQuizzId(int quizzId,string userId)
+        public virtual async Task<IEnumerable<QuizzScore>> GetQuizzScoreByUserIdAndQuizzId(int quizzId,string userId)
         {
             return await _applicationDbContext.QuizzScores
                 .Where(x => x.QuizzId == quizzId && x.UserId == userId)
                 .ToListAsync();
         }
-
+         public async Task<bool> DeleteByQuizzId(int quizzId)
+        {
+            var quizzScores = await _applicationDbContext.QuizzScores.Where(x => x.QuizzId == quizzId).ToListAsync();
+            if(quizzScores!=null && quizzScores.Any())
+            {
+                _applicationDbContext.QuizzScores.RemoveRange(quizzScores);
+                await _applicationDbContext.SaveChangesAsync();
+            }
+            return true;
+        }
 
     }
 }

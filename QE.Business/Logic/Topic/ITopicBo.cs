@@ -11,8 +11,8 @@ namespace QE.Business.Logic.Topic
     {
         Task<IEnumerable<TopicModel>> GetAll(int pageIndex, int pageSize);
         Task<TopicModel> GetById(int id);
-        Task<int> Create(TopicModel topicModel);
-        Task<int> Update(TopicModel topicModel);
+        Task<int> Create(TopicModel model);
+        Task<int> Update(TopicModel model);
         Task<int> Delete(int id);
     }
 }

@@ -26,6 +26,17 @@ namespace QE.DataAccess.Repository.Detail.Implement
                 .ThenInclude(x => x.Quizz)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
-
+        public virtual async Task<bool> DeleteQuestionsNotRelationship()
+        {
+            var questionNotRelationship = await _applicationDbContext.Questions
+                .Where(q => !_applicationDbContext.QuestionQuizzes.Any(qq => qq.QuestionId == q.Id))
+                .ToListAsync();
+            if(questionNotRelationship!=null && questionNotRelationship.Any())
+            {
+                _applicationDbContext.Questions.RemoveRange(questionNotRelationship);
+                await _applicationDbContext.SaveChangesAsync();
+            }
+            return true;
+        }
     }
 }

@@ -16,13 +16,4 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Logic\Competition\" />
-    <Folder Include="Logic\CompetitionQuizz\" />
-    <Folder Include="Logic\Question\" />
-    <Folder Include="Logic\VocabularyTopic\" />
-    <Folder Include="Logic\QuizzScore\" />
-    <Folder Include="Logic\Quizz\" />
-  </ItemGroup>
-
 </Project>

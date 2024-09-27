@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QE.Business.Logic.QuestionQuizz
+namespace QE.Business.Logic.Question
 {
     public interface IQuestionBo
     {
@@ -13,7 +13,6 @@ namespace QE.Business.Logic.QuestionQuizz
         Task<int> CreateMultipleChoiceQuestion(MultipleChoiceQuestionModel model);
         Task<int> UpdateFillinBlankQuestion(FillinBlankQuestionModel model);
         Task<int> UpdateMultipleChoiceQuestion(MultipleChoiceQuestionModel model);
-        Task<int> DeleteFillinBlankQuestion(FillinBlankQuestionModel model);
-        Task<int> DeleteMultipleChoiceQuestion(MultipleChoiceQuestionModel model);
+        Task<int> DeleteQuestion(int id);
     }
 }

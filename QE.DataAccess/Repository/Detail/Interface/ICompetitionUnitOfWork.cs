@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace QE.DataAccess.Repository.Detail.Interface
 {
-    public interface IQuestionQuizzUnitOfWork:IUnitOfWork
+    public interface ICompetitionUnitOfWork:IUnitOfWork
     {
-        IQuestionRepository Question { get; }
+        ICompetitionRepository Competition { get; }
         IQuizzRepository Quizz { get; }
-        IQuestionQuizzRepository QuestionQuizz { get; }
-        IQuizzScoreRepository QuizzScore { get; }
+        ICompetitionQuizzRepository CompetitionQuizz { get; }
         IUserRepository AppUser { get; }
     }
 }

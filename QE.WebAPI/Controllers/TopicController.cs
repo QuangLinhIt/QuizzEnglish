@@ -2,6 +2,7 @@
 using QE.Business.Logic.Topic;
 using QE.Business.Model;
 using QE.Core.CustomerError;
+using QE.Core.Enum;
 
 namespace QE.WebAPI.Controllers
 {
@@ -11,24 +12,25 @@ namespace QE.WebAPI.Controllers
     {
         private readonly ITopicBo _topicBo;
         private readonly ILogger<TopicController> _logger;
-        public TopicController(ITopicBo topicBo,ILogger<TopicController> logger)
+        public TopicController(ITopicBo topicBo, ILogger<TopicController> logger)
         {
             _topicBo = topicBo;
             _logger = logger;
         }
 
         [HttpGet("Topics")]
-        public async Task<IActionResult> GetAll(int pageIndex,int pageSize)
+        public async Task<IActionResult> GetAll(int pageIndex, int pageSize)
         {
             try
             {
                 var topics = await _topicBo.GetAll(pageIndex, pageSize);
-                if(topics!=null && topics.Any())
+                if (topics != null && topics.Any())
                 {
                     return Ok(new DataApiResponse<IEnumerable<TopicModel>> { Data = topics, Success = true, Message = "" });
                 }
                 return Ok(new DataApiResponse<IEnumerable<TopicModel>> { Success = false, Message = "Data not found" });
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.LogWarning(ex.Message);
                 throw new CustomeNotFoundException(ex.Message);
@@ -46,7 +48,8 @@ namespace QE.WebAPI.Controllers
                     return Ok(new DataApiResponse<TopicModel> { Success = false, Message = "Data not found" });
                 }
                 return Ok(new DataApiResponse<TopicModel> { Data = topic, Success = true, Message = "" });
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.LogWarning(ex.Message);
                 throw new CustomeNotFoundException(ex.Message);
@@ -58,14 +61,18 @@ namespace QE.WebAPI.Controllers
         {
             try
             {
-                if (model.Name==null)
+                if (string.IsNullOrWhiteSpace(model.Name))
                 {
-                    return Ok(new DataApiResponse<object> { Success = false, Message = "Data not found" });
+                    return Ok(new DataApiResponse<object> { Success = false, Message = "Create topic fail" });
                 }
                 var topic = await _topicBo.Create(model);
-                return Ok(new DataApiResponse<object> { Data = topic, Success = true, Message = "Create Success" });
+                if (topic == (int)ResponseEnumType.Fail)
+                {
+                    return Ok(new DataApiResponse<object> { Success = false, Message = "Create topic fail" });
+                }
+                return Ok(new DataApiResponse<object> { Success = true, Message = "Create topic success" });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogWarning(ex.Message);
                 throw new CustomeNotFoundException(ex.Message);
@@ -77,14 +84,18 @@ namespace QE.WebAPI.Controllers
         {
             try
             {
-                if (model == null )
+                if (string.IsNullOrWhiteSpace(model.Name))
                 {
-                    return Ok(new DataApiResponse<object> { Success = false, Message = "Data not found" });
+                    return Ok(new DataApiResponse<object> { Success = false, Message = "Update topic fail" });
                 }
                 var topic = await _topicBo.Update(model);
-                return Ok(new DataApiResponse<object> { Data = topic, Success = true, Message = "Create Success" });
+                if (topic == (int)ResponseEnumType.Fail)
+                {
+                    return Ok(new DataApiResponse<object> { Success = false, Message = "Update topic fail" });
+                }
+                return Ok(new DataApiResponse<object> { Success = true, Message = "Update topic success" });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogWarning(ex.Message);
                 throw new CustomeNotFoundException(ex.Message);
@@ -97,7 +108,11 @@ namespace QE.WebAPI.Controllers
             try
             {
                 var topic = await _topicBo.Delete(id);
-                return Ok(new DataApiResponse<object> { Data = topic, Success = true, Message = "Create Success" });
+                if (topic == (int)ResponseEnumType.Fail)
+                {
+                    return Ok(new DataApiResponse<object> { Success = false, Message = "Delete topic fail" });
+                }
+                return Ok(new DataApiResponse<object> { Success = true, Message = "Delete topic success" });
             }
             catch (Exception ex)
             {

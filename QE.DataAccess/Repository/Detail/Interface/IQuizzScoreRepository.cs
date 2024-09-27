@@ -10,6 +10,7 @@ namespace QE.DataAccess.Repository.Detail.Interface
 {
     public interface IQuizzScoreRepository:IRepository<QuizzScore>
     {
-        Task<IEnumerable<QuizzScore>>? GetQuizzScoreByUserIdAndQuizzId(int quizzId, string userId);
+        Task<IEnumerable<QuizzScore>> GetQuizzScoreByUserIdAndQuizzId(int quizzId, string userId);
+        Task<bool> DeleteByQuizzId(int quizzId);
     }
 }

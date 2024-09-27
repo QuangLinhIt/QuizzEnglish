@@ -1,4 +1,5 @@
-﻿using QE.DataAccess.Context;
+﻿using Microsoft.EntityFrameworkCore;
+using QE.DataAccess.Context;
 using QE.DataAccess.Repository.Common.Implement;
 using QE.DataAccess.Repository.Detail.Interface;
 using QE.Entity.Entity;
@@ -18,5 +19,11 @@ namespace QE.DataAccess.Repository.Detail.Implement
             _applicationDbContext = applicationDbContext;
         }
 
+        public virtual async Task<IEnumerable<CompetitionQuizz>> GetByCompetitionId(int competitionId)
+        {
+            return await _applicationDbContext.CompetitionQuizzes
+                .Where(x => x.CompetitionId == competitionId)
+                .ToListAsync();
+        }
     }
 }

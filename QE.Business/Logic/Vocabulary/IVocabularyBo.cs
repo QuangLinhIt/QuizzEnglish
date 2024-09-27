@@ -10,8 +10,8 @@ namespace QE.Business.Logic.Vocabulary
     public interface IVocabularyBo
     {
         Task<VocabularyModel> GetById(int id);
-        Task<int> Create(VocabularyModel vocabularyModel);
-        Task<int> Update(VocabularyModel vocabularyModel);
+        Task<int> Create(VocabularyModel model);
+        Task<int> Update(VocabularyModel model);
         Task<int> Delete(int id);
     }
 }

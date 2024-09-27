@@ -36,10 +36,12 @@ namespace QE.DataAccess
             services.AddScoped<ITopicRepository, TopicRepository>();
             services.AddScoped<IVocabularyRepository, VocabularyRepository>();
             services.AddScoped<IVocabularyTopicRepository, VocabularyTopicRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IVocabularyTopicUnitOfWork, VocabularyTopicUnitOfWork>();
             services.AddScoped<IQuestionQuizzUnitOfWork, QuestionQuizzUnitOfWork>();
+            services.AddScoped<ICompetitionUnitOfWork, CompetitionUnitOfWork>();
         }
         #endregion
 

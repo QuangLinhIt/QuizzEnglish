@@ -9,16 +9,26 @@ using System.Threading.Tasks;
 
 namespace QE.DataAccess.Repository.Detail.Implement
 {
-    public class QuestionQuizzUnitOfWork:UnitOfWork,IQuestionQuizzUnitOfWork
+    public class QuestionQuizzUnitOfWork : UnitOfWork, IQuestionQuizzUnitOfWork
     {
         public IQuestionRepository Question { get; private set; }
         public IQuizzRepository Quizz { get; private set; }
         public IQuestionQuizzRepository QuestionQuizz { get; private set; }
-        public QuestionQuizzUnitOfWork(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
+        public IQuizzScoreRepository QuizzScore { get; private set; }
+        public IUserRepository AppUser { get; private set; }
+        public QuestionQuizzUnitOfWork(ApplicationDbContext applicationDbContext,
+                                    IQuestionRepository questionRepository,
+                                    IQuizzRepository quizzRepository,
+                                    IQuestionQuizzRepository questionQuizzRepository,
+                                    IQuizzScoreRepository quizzScoreRepository,
+                                    IUserRepository appUserRepository)
+            : base(applicationDbContext)
         {
-            Question = new QuestionRepository(applicationDbContext);
-            Quizz = new QuizzRepository(applicationDbContext);
-            QuestionQuizz = new QuestionQuizzRepository(applicationDbContext);
+            Question = questionRepository;
+            Quizz = quizzRepository;
+            QuestionQuizz = questionQuizzRepository;
+            QuizzScore = quizzScoreRepository;
+            AppUser = appUserRepository;
         }
     }
 }
